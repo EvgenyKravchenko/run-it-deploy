@@ -23,7 +23,9 @@ self.addEventListener('install', e => {
       'assets/run-it.css',
       'assets/run-it.js',
       'assets/vendor.css',
-      'assets/vendor.js'
+      'assets/vendor.js',
+      'https://fonts.gstatic.com/s/roboto/v15/oMMgfZMQthOryQo9n22dcuvvDin1pK8aKteLpeZ5c0A.woff2',
+      'https://fonts.gstatic.com/s/indieflower/v8/10JVD_humAd5zP2yrFqw6hampu5_7CjHW5spxoeN3Vs.woff2'
     ]))
   );
 });
