@@ -2,7 +2,6 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('runit').then(cache => cache.addAll([
       '/',
-      '/now',
       'Anton-Korchynskyi.jpg',
       'Antonyuk.jpg',
       'bg.jpg',
