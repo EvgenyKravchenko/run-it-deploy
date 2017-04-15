@@ -1206,9 +1206,53 @@ define('run-it/routes/application', ['exports', 'ember'], function (exports, _em
   });
 });
 define('run-it/routes/index', ['exports', 'ember'], function (exports, _ember) {
+  var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+  var RSVP = _ember['default'].RSVP;
   exports['default'] = _ember['default'].Route.extend({
-    beforeModel: function beforeModel() {
-      this.replaceWith('/now');
+    model: function model() {
+      return RSVP.hash({
+        talks: this.getTalks()
+      });
+    },
+
+    getTalks: function getTalks() {
+      var talks = this.store.peekAll('speech');
+      var now = new Date();
+
+      now.setHours(10);
+
+      var start = new Date();
+      var end = new Date();
+
+      return talks.filter(function (talk) {
+        var _talk$get$split = talk.get('timeStart').split(':');
+
+        var _talk$get$split2 = _slicedToArray(_talk$get$split, 2);
+
+        var startHours = _talk$get$split2[0];
+        var startMinutes = _talk$get$split2[1];
+
+        var _talk$get$split3 = talk.get('timeEnd').split(':');
+
+        var _talk$get$split32 = _slicedToArray(_talk$get$split3, 2);
+
+        var endHours = _talk$get$split32[0];
+        var endMinutes = _talk$get$split32[1];
+
+        start.setHours(startHours);
+        start.setMinutes(startMinutes);
+        end.setHours(endHours);
+        end.setMinutes(endMinutes);
+
+        return now > start && now < end;
+      });
+    },
+
+    actions: {
+      pickTalk: function pickTalk(talk) {
+        this.controller.set('pickedTalk', talk);
+      }
     }
   });
 });
@@ -1309,7 +1353,7 @@ define("run-it/templates/components/break-time", ["exports"], function (exports)
   exports["default"] = Ember.HTMLBars.template({ "id": "VI6vTsfG", "block": "{\"statements\":[[\"open-element\",\"img\",[]],[\"dynamic-attr\",\"src\",[\"unknown\",[\"break\",\"speaker\",\"avatarUrl\"]],null],[\"static-attr\",\"class\",\"talk-image\"],[\"flush-element\"],[\"close-element\"],[\"text\",\"\\n\"],[\"open-element\",\"h1\",[]],[\"flush-element\"],[\"append\",[\"unknown\",[\"break\",\"title\"]],false],[\"close-element\"],[\"text\",\"\\n\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"blocks\":[],\"hasPartials\":false}", "meta": { "moduleName": "run-it/templates/components/break-time.hbs" } });
 });
 define("run-it/templates/components/footer-menu", ["exports"], function (exports) {
-  exports["default"] = Ember.HTMLBars.template({ "id": "1lAtSdcT", "block": "{\"statements\":[[\"block\",[\"link-to\"],[\"now\"],null,1],[\"text\",\"\\n\"],[\"block\",[\"link-to\"],[\"schedule\"],null,0]],\"locals\":[],\"named\":[],\"yields\":[],\"blocks\":[{\"statements\":[[\"text\",\"Schedule\"]],\"locals\":[]},{\"statements\":[[\"text\",\"Now\"]],\"locals\":[]}],\"hasPartials\":false}", "meta": { "moduleName": "run-it/templates/components/footer-menu.hbs" } });
+  exports["default"] = Ember.HTMLBars.template({ "id": "a+pP1cyf", "block": "{\"statements\":[[\"block\",[\"link-to\"],[\"/\"],null,1],[\"text\",\"\\n\"],[\"block\",[\"link-to\"],[\"schedule\"],null,0]],\"locals\":[],\"named\":[],\"yields\":[],\"blocks\":[{\"statements\":[[\"text\",\"Schedule\"]],\"locals\":[]},{\"statements\":[[\"text\",\"Now\"]],\"locals\":[]}],\"hasPartials\":false}", "meta": { "moduleName": "run-it/templates/components/footer-menu.hbs" } });
 });
 define("run-it/templates/components/talk-item", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template({ "id": "ifg7TJC8", "block": "{\"statements\":[[\"open-element\",\"img\",[]],[\"dynamic-attr\",\"src\",[\"unknown\",[\"talk\",\"speaker\",\"avatarUrl\"]],null],[\"static-attr\",\"class\",\"talk-image\"],[\"flush-element\"],[\"close-element\"],[\"text\",\"\\n\"],[\"open-element\",\"h1\",[]],[\"flush-element\"],[\"append\",[\"unknown\",[\"talk\",\"speaker\",\"name\"]],false],[\"close-element\"],[\"text\",\"\\n\"],[\"open-element\",\"h2\",[]],[\"flush-element\"],[\"append\",[\"unknown\",[\"talk\",\"title\"]],false],[\"close-element\"],[\"text\",\"\\n\\n\"],[\"block\",[\"unless\"],[[\"get\",[\"activeTalk\"]]],null,0],[\"text\",\"\\n\"]],\"locals\":[],\"named\":[],\"yields\":[],\"blocks\":[{\"statements\":[[\"text\",\"  \"],[\"open-element\",\"h3\",[]],[\"flush-element\"],[\"append\",[\"unknown\",[\"talk\",\"stream\"]],false],[\"text\",\" stream\"],[\"close-element\"],[\"text\",\"\\n\\n  \"],[\"open-element\",\"button\",[]],[\"static-attr\",\"class\",\"pick-speaker\"],[\"modifier\",[\"action\"],[[\"get\",[null]],\"pick\"]],[\"flush-element\"],[\"text\",\"Pick\"],[\"close-element\"],[\"text\",\"\\n\"]],\"locals\":[]}],\"hasPartials\":false}", "meta": { "moduleName": "run-it/templates/components/talk-item.hbs" } });

@@ -629,7 +629,7 @@ define('run-it/tests/routes/index.jshint.lint-test', ['exports'], function (expo
   QUnit.module('JSHint | routes/index.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'routes/index.js should pass jshint.');
+    assert.ok(false, 'routes/index.js should pass jshint.\nroutes/index.js: line 8, col 7, Missing semicolon.\n\n1 error');
   });
 });
 define('run-it/tests/routes/now.jshint.lint-test', ['exports'], function (exports) {
